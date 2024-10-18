@@ -1,0 +1,17 @@
+def calculate_days_to_goal(start_distance, daily_increase_percent, goal_distance):
+
+  days = 1
+  distance = start_distance
+
+  while distance < goal_distance:
+    distance *= (1 + daily_increase_percent / 100)
+    days += 1
+
+  return days
+
+start_distance = 10
+daily_increase_percent = 10
+goal_distance = 50
+
+result = calculate_days_to_goal(start_distance, daily_increase_percent, goal_distance)
+print (f"Спортсмен подолає 50 км за {result} днів.")
