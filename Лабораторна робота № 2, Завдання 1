@@ -1,0 +1,48 @@
+import math
+
+def calculate_y(x):
+  """Обчислює значення виразу y = (e^x - e^-x) / sqrt(1-x^2).
+
+  Args:
+    x: Значення змінної x.
+
+  Returns:
+    Значення виразу y.
+  """
+
+  if abs(x) >= 1:
+    return "Помилка: Знаменник не може дорівнювати нулю"
+  else:
+    return (math.exp(x) - math.exp(-x)) / math.sqrt(1 - x**2)
+
+def calculate_product(n):
+  """Обчислює добуток непарних або парних чисел до N.
+
+  Args:
+    n: Верхня межа для обчислення добутку.
+
+  Returns:
+    Добуток непарних або парних чисел.
+  """
+
+  product = 1
+  if n % 2 == 0:
+    # Якщо N парне, множимо парні числа
+    for i in range(2, n+1, 2):
+      product *= i
+  else:
+    # Якщо N непарне, множимо непарні числа
+    for i in range(1, n+1, 2):
+      product *= i
+  return product
+
+# Отримання вхідних даних від користувача
+x = float(input("Введіть значення x: "))
+n = int(input("Введіть ціле невід'ємне число N: "))
+
+# Виклик функцій та виведення результатів
+result_y = calculate_y(x)
+result_product = calculate_product(n)
+
+print("Значення y:", result_y)
+print("Добуток:", result_product)
