@@ -1,48 +1,40 @@
-import math
+import math  # Для використання вбудованих функцій
+from my_module import calculate_product  # Імпорт функції з модуля
 
-def calculate_y(x):
-  """Обчислює значення виразу y = (e^x - e^-x) / sqrt(1-x^2).
+def compute_expression(x):
+    """
+    Обчислює значення z = e^(sqrt(x)) / sqrt(1 - x)
+    """
+    try:
+        numerator = math.exp(math.sqrt(x))
+        denominator = math.sqrt(1 - x)
+        result = numerator / denominator
+        return result
+    except ValueError as e:
+        return f"Помилка: {e} (значення x повинно бути від 0 до 1)"
 
-  Args:
-    x: Значення змінної x.
+def main():
+    # Завдання 1: перша функція
+    try:
+        x = float(input("Введіть значення x (0 <= x < 1): "))
+        if not (0 <= x < 1):
+            print("Значення x повинно бути у діапазоні [0, 1).")
+        else:
+            z = compute_expression(x)
+            print(f"Результат обчислення z: {z}")
+    except ValueError:
+        print("Помилка: введіть коректне числове значення для x.")
 
-  Returns:
-    Значення виразу y.
-  """
+    # Завдання 2: друга функція з модуля
+    try:
+        N = int(input("Введіть ціле невід'ємне число N: "))
+        if N < 0:
+            print("N повинно бути невід'ємним числом.")
+        else:
+            result = calculate_product(N)
+            print(f"Результат обчислення добутку: {result}")
+    except ValueError:
+        print("Помилка: введіть ціле число.")
 
-  if abs(x) >= 1:
-    return "Помилка: Знаменник не може дорівнювати нулю"
-  else:
-    return (math.exp(x) - math.exp(-x)) / math.sqrt(1 - x**2)
-
-def calculate_product(n):
-  """Обчислює добуток непарних або парних чисел до N.
-
-  Args:
-    n: Верхня межа для обчислення добутку.
-
-  Returns:
-    Добуток непарних або парних чисел.
-  """
-
-  product = 1
-  if n % 2 == 0:
-    # Якщо N парне, множимо парні числа
-    for i in range(2, n+1, 2):
-      product *= i
-  else:
-    # Якщо N непарне, множимо непарні числа
-    for i in range(1, n+1, 2):
-      product *= i
-  return product
-
-# Отримання вхідних даних від користувача
-x = float(input("Введіть значення x: "))
-n = int(input("Введіть ціле невід'ємне число N: "))
-
-# Виклик функцій та виведення результатів
-result_y = calculate_y(x)
-result_product = calculate_product(n)
-
-print("Значення y:", result_y)
-print("Добуток:", result_product)
+if __name__ == "__main__":
+    main()
