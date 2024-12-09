@@ -1,0 +1,43 @@
+!! Код my_module.py: !!
+
+def calculate_product(N):
+    """
+    Обчислює добуток непарних чисел (1, 3, ..., N), якщо N непарне,
+    або добуток парних чисел (2, 4, ..., N), якщо N парне.
+    """
+    product = 1
+
+    if N % 2 == 0:
+        # N парне, обчислюємо добуток парних чисел
+        for i in range(2, N + 1, 2):
+            product *= i
+    else:
+        # N непарне, обчислюємо добуток непарних чисел
+        for i in range(1, N + 1, 2):
+            product *= i
+    
+    return product
+
+!! Код main.py: !!
+
+# Імпортуємо функцію calculate_product з модуля my_module
+from my_module import calculate_product
+
+def main():
+    """
+    Основна програма для демонстрації роботи модуля.
+    """
+    try:
+        # Введення числа N
+        N = int(input("Введіть ціле невід'ємне число N: "))
+        if N < 0:
+            print("N повинно бути невід'ємним числом.")
+        else:
+            # Виклик функції з модуля
+            result = calculate_product(N)
+            print(f"Результат обчислення добутку: {result}")
+    except ValueError:
+        print("Помилка: введіть коректне ціле число.")
+
+if __name__ == "__main__":
+    main()
