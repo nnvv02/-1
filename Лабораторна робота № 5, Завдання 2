@@ -1,0 +1,10 @@
+# Створення двовимірного масиву
+rows = 7  # кількість рядків
+cols = 7  # кількість стовпців
+
+# Ініціалізація двовимірного масиву
+matrix = [[cols - j for j in range(cols)] for i in range(rows)]
+
+# Виведення матриці
+for row in matrix:
+    print(row)
