@@ -1,0 +1,79 @@
+# Функція для виведення всіх значень словника
+def print_dictionary(data):
+    for key, value in data.items():
+        print(f"{key}: Потужність = {value['power']} к.с., Вартість = {value['price']} грн")
+
+# Функція для додавання нового запису до словника
+def add_entry(data, car_name, power, price):
+    data[car_name] = {'power': power, 'price': price}
+    print(f"Запис '{car_name}' додано успішно!\n")
+
+# Функція для видалення запису зі словника
+def delete_entry(data, car_name):
+    if car_name in data:
+        del data[car_name]
+        print(f"Запис '{car_name}' видалено успішно!\n")
+    else:
+        print(f"Запис '{car_name}' не знайдено!\n")
+
+# Функція для перегляду вмісту словника за відсортованими ключами
+def view_sorted_keys(data):
+    print("Словник відсортований за ключами:")
+    for key in sorted(data.keys()):
+        print(f"{key}: Потужність = {data[key]['power']} к.с., Вартість = {data[key]['price']} грн")
+
+# Функція для обчислення загальної вартості автомобілів із потужністю > 100 к.с.
+def calculate_total_cost(data):
+    total_cost = sum(car['price'] for car in data.values() if car['power'] > 100)
+    print(f"Загальна вартість автомобілів з потужністю > 100 к.с.: {total_cost} грн\n")
+    return total_cost
+
+# Основна частина програми
+def main():
+    # Ініціалізація словника з даними про автомобілі
+    cars = {
+        "Toyota Corolla": {'power': 90, 'price': 260000},
+        "Honda Civic": {'power': 110, 'price': 190000},
+        "BMW 320i": {'power': 150, 'price': 350000},
+        "Audi A4": {'power': 170, 'price': 490000},
+        "Ford Fiesta": {'power': 80, 'price': 280000},
+        "Mazda 6": {'power': 140, 'price': 390000},
+        "Mercedes C200": {'power': 160, 'price': 400000},
+        "Volkswagen Passat": {'power': 130, 'price': 350000},
+        "Nissan Sentra": {'power': 95, 'price': 320000},
+        "Hyundai Elantra": {'power': 105, 'price': 330000},
+    }
+
+    while True:
+        print("\nОберіть дію:")
+        print("1. Вивести всі значення словника")
+        print("2. Додати новий запис")
+        print("3. Видалити запис")
+        print("4. Переглянути словник за відсортованими ключами")
+        print("5. Обчислити загальну вартість автомобілів з потужністю > 100 к.с.")
+        print("6. Вийти")
+
+        choice = input("Введіть номер дії: ")
+
+        if choice == "1":
+            print_dictionary(cars)
+        elif choice == "2":
+            name = input("Введіть назву автомобіля: ")
+            power = int(input("Введіть потужність двигуна (к.с.): "))
+            price = int(input("Введіть вартість (грн): "))
+            add_entry(cars, name, power, price)
+        elif choice == "3":
+            name = input("Введіть назву автомобіля для видалення: ")
+            delete_entry(cars, name)
+        elif choice == "4":
+            view_sorted_keys(cars)
+        elif choice == "5":
+            calculate_total_cost(cars)
+        elif choice == "6":
+            print("Програма завершена.")
+            break
+        else:
+            print("Невірний вибір, спробуйте ще раз.\n")
+
+if __name__ == "__main__":
+    main()
