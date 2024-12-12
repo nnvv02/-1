@@ -1,0 +1,32 @@
+def split_list(lst, split_index):
+    """
+    Розбиває список на дві частини за вказаним індексом.
+
+    Args:
+        lst (list): Список, який потрібно розбити.
+        split_index (int): Порядковий номер елемента, за яким відбувається розбиття.
+
+    Returns:
+        tuple: Два списки - перший до індексу, другий після індексу.
+    """
+    if split_index < 0 or split_index > len(lst):
+        print("Помилка: індекс виходить за межі списку.")
+        return [], []
+
+    # Розбиття списку
+    first_part = lst[:split_index]
+    second_part = lst[split_index:]
+    return first_part, second_part
+
+# Основна частина програми
+if __name__ == "__main__":
+    # Введення даних користувачем
+    input_list = input("Введіть елементи списку через пробіл: ").split()
+    split_index = int(input("Вкажіть порядковий номер елемента для розбиття списку: "))
+
+    # Виклик функції
+    list1, list2 = split_list(input_list, split_index)
+
+    # Вивід результату
+    print("Перший список:", list1)
+    print("Другий список:", list2)
