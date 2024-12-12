@@ -1,0 +1,25 @@
+def add_vowels_to_set(base_set):
+    """
+    Додає до заданої множини голосні латинські літери.
+
+    Args:
+        base_set (set): Початкова множина символів.
+
+    Returns:
+        set: Нова множина, що містить початкові символи та голосні літери.
+    """
+    vowels = {'a', 'e', 'i', 'o', 'u', 'y'}
+    result_set = base_set.union(vowels)
+    return result_set
+
+# Основна частина програми
+if __name__ == "__main__":
+    # Початкова множина символів {c, d}
+    base_set = {'c', 'd'}
+    
+    # Виклик функції для додавання голосних літер
+    updated_set = add_vowels_to_set(base_set)
+    
+    # Вивід результату
+    print("Початкова множина символів:", base_set)
+    print("Множина після додавання голосних літер:", updated_set)
