@@ -1,0 +1,39 @@
+def bubble_sort(lst):
+    """
+    Функція для сортування списку методом бульбашки.
+
+    Args:
+        lst (list): Список чисел для сортування.
+
+    Returns:
+        list: Відсортований список.
+    """
+    n = len(lst)
+    for i in range(n):
+        swapped = False
+        for j in range(0, n - i - 1):
+            if lst[j] > lst[j + 1]:
+                # Обмін елементів
+                lst[j], lst[j + 1] = lst[j + 1], lst[j]
+                swapped = True
+        # Якщо за один прохід обміну не відбулося, список вже відсортований
+        if not swapped:
+            break
+    return lst
+
+# Основна частина програми
+if __name__ == "__main__":
+    # Введення даних користувачем
+    input_list = input("Введіть числа списку через пробіл: ").split()
+    try:
+        # Конвертація у числа
+        input_list = [float(i) for i in input_list]
+    except ValueError:
+        print("Помилка: введіть лише числові значення!")
+        exit()
+
+    # Виклик функції сортування
+    sorted_list = bubble_sort(input_list)
+
+    # Вивід результату
+    print("Відсортований список:", sorted_list)
