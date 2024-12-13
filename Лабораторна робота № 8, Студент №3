@@ -1,0 +1,111 @@
+# Оновлений словник для зберігання інформації про успішність студентів
+students_data = {
+    "group_number": "Група-101",
+    "students": [
+        {
+            "name": "Іваненко Петро Олексійович",
+            "course": 2,
+            "subjects": {
+                "Математика": [90, 85, 92],
+                "Фізика": [88, 79, 85],
+                "Програмування": [95, 94, 96]
+            },
+            "average": 89.67
+        }
+    ]
+}
+
+# Функція для обчислення середнього балу
+def calculate_average(subjects):
+    total_marks = sum(sum(marks) for marks in subjects.values())
+    total_subjects = sum(len(marks) for marks in subjects.values())
+    return round(total_marks / total_subjects, 2) if total_subjects else 0
+
+# Функція для виведення інформації про студентів
+def display_students(data):
+    print(f"\nНомер групи: {data['group_number']}")
+    for idx, student in enumerate(data["students"], start=1):
+        print(f"\n--- Студент {idx} ---")
+        print(f"ПІБ: {student['name']}")
+        print(f"Курс: {student['course']}")
+        print("Предмети та оцінки:")
+        for subject, marks in student["subjects"].items():
+            print(f"   {subject}: {', '.join(map(str, marks))}")
+        print(f"Середній бал: {student['average']}")
+
+# Функція для експорту даних у файл
+def export_to_file(data, filename="students_data.txt"):
+    with open(filename, "w", encoding="utf-8") as file:
+        file.write(f"Номер групи: {data['group_number']}\n")
+        for idx, student in enumerate(data["students"], start=1):
+            file.write(f"\n--- Студент {idx} ---\n")
+            file.write(f"ПІБ: {student['name']}\n")
+            file.write(f"Курс: {student['course']}\n")
+            file.write("Предмети та оцінки:\n")
+            for subject, marks in student["subjects"].items():
+                file.write(f"   {subject}: {', '.join(map(str, marks))}\n")
+            file.write(f"Середній бал: {student['average']}\n")
+    print(f"\nДані успішно експортовано у файл '{filename}'.")
+
+# Функція для імпорту даних із файлу
+def import_from_file(filename="students_data.txt"):
+    try:
+        with open(filename, "r", encoding="utf-8") as file:
+            data = {"group_number": "", "students": []}
+            student = {}
+            subjects = {}
+            for line in file:
+                line = line.strip()
+                if "Номер групи:" in line:
+                    data["group_number"] = line.split(": ")[1]
+                elif "ПІБ:" in line:
+                    if student:
+                        student["subjects"] = subjects
+                        student["average"] = calculate_average(subjects)
+                        data["students"].append(student)
+                        subjects = {}
+                    student = {"name": line.split(": ")[1]}
+                elif "Курс:" in line:
+                    student["course"] = int(line.split(": ")[1])
+                elif ":" in line and "   " in line:
+                    subject, marks = line.split(": ")
+                    subjects[subject.strip()] = list(map(int, marks.split(", ")))
+            if student:  # Додаємо останнього студента
+                student["subjects"] = subjects
+                student["average"] = calculate_average(subjects)
+                data["students"].append(student)
+        print("\nДані успішно імпортовано з файлу.")
+        return data
+    except FileNotFoundError:
+        print("\nФайл не знайдено. Імпорт неможливий.")
+        return None
+
+# Головне меню програми
+def main():
+    global students_data
+    print("Програма для роботи зі словником студентів успішності.")
+    while True:
+        print("\nОберіть дію:")
+        print("1. Вивести інформацію про студентів")
+        print("2. Експортувати дані у файл")
+        print("3. Імпортувати дані з файлу")
+        print("4. Вийти з програми")
+        choice = input("Ваш вибір: ")
+
+        if choice == '1':
+            display_students(students_data)
+        elif choice == '2':
+            export_to_file(students_data)
+        elif choice == '3':
+            imported_data = import_from_file()
+            if imported_data:
+                students_data = imported_data
+        elif choice == '4':
+            print("Програма завершена. До побачення!")
+            break
+        else:
+            print("Невірний вибір. Спробуйте ще раз.")
+
+# Запускаємо програму
+if __name__ == "__main__":
+    main()
