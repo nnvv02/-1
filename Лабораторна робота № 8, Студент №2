@@ -1,0 +1,119 @@
+# Оновлений словник для зберігання інформації про успішність студентів
+students_data = {
+    "group_number": "Група-101",  # Номер групи
+    "students": [  # Список студентів з детальною інформацією
+        {
+            "name": "Іваненко Петро Олексійович",
+            "course": 2,
+            "subjects": {
+                "Математика": [90, 85, 92],
+                "Фізика": [88, 79, 85],
+                "Програмування": [95, 94, 96]
+            },
+            "average": 89.67  # Доданий середній бал
+        },
+        {
+            "name": "Павленко Марія Вікторівна",
+            "course": 2,
+            "subjects": {
+                "Математика": [75, 80, 78],
+                "Фізика": [70, 65, 72],
+                "Програмування": [89, 85, 90]
+            },
+            "average": 77.22
+        }
+    ]
+}
+
+# Функція для обчислення середнього балу студента
+def calculate_average(subjects):
+    """
+    Обчислює середній бал студента на основі його оцінок.
+    """
+    total_marks = sum(sum(marks) for marks in subjects.values())
+    total_subjects = sum(len(marks) for marks in subjects.values())
+    return round(total_marks / total_subjects, 2) if total_subjects else 0
+
+# Функція для додавання нового студента до словника
+def add_student(data):
+    """
+    Функція додає нового студента до списку студентів.
+    """
+    name = input("Введіть ПІБ студента: ")
+    course = int(input("Введіть номер курсу: "))
+    
+    # Створюємо словник для збереження оцінок студента
+    subjects = {}
+    while True:
+        subject = input("Введіть назву предмета (або 'stop' для завершення): ")
+        if subject.lower() == 'stop':
+            break
+        marks = input(f"Введіть оцінки для '{subject}' через пробіл: ")
+        marks_list = list(map(int, marks.split()))
+        subjects[subject] = marks_list
+    
+    # Обчислюємо середній бал
+    average = calculate_average(subjects)
+    
+    # Додаємо нового студента до загального списку
+    new_student = {
+        "name": name,
+        "course": course,
+        "subjects": subjects,
+        "average": average
+    }
+    data["students"].append(new_student)
+    print("\nСтудента успішно додано!\n")
+
+# Функція для сортування студентів за середнім балом
+def sort_students_by_average(data):
+    """
+    Функція сортує студентів за середнім балом у порядку спадання.
+    """
+    sorted_students = sorted(data["students"], key=lambda s: s["average"], reverse=True)
+    print("\nСписок студентів, відсортований за середнім балом:")
+    for student in sorted_students:
+        print(f"{student['name']} - Середній бал: {student['average']:.2f}")
+    print()
+
+# Функція для виведення словника
+def display_students(data):
+    """
+    Функція виводить інформацію про всіх студентів.
+    """
+    print(f"\nНомер групи: {data['group_number']}")
+    for student in data["students"]:
+        print("\nПІБ:", student["name"])
+        print("Курс:", student["course"])
+        print("Предмети та оцінки:")
+        for subject, marks in student["subjects"].items():
+            print(f"  {subject}: {marks}")
+        print(f"Середній бал: {student['average']:.2f}")
+    print()
+
+# Основне меню програми
+def main():
+    print("Програма для роботи зі словником студентів успішності.")
+    while True:
+        print("\nОберіть дію:")
+        print("1. Додати нового студента")
+        print("2. Вивести інформацію про студентів")
+        print("3. Відсортувати студентів за середнім балом")
+        print("4. Вийти з програми")
+        choice = input("Ваш вибір: ")
+        
+        if choice == '1':
+            add_student(students_data)
+        elif choice == '2':
+            display_students(students_data)
+        elif choice == '3':
+            sort_students_by_average(students_data)
+        elif choice == '4':
+            print("Програма завершена. До побачення!")
+            break
+        else:
+            print("Невірний вибір. Спробуйте ще раз.")
+
+# Запускаємо програму
+if __name__ == "__main__":
+    main()
