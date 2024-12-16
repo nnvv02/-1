@@ -1,0 +1,45 @@
+import re
+
+# а) Створення текстового файлу TF11_1 із символьних рядків однакової довжини
+def create_file_1():
+    lines = [
+        "abc123def", 
+        "456ghij78", 
+        "klm987opq", 
+        "12rstuv34"
+    ]
+    
+    try:
+        with open("TF11_1.txt", "w") as f:
+            for line in lines:
+                f.write(line + "\n")
+    except IOError as e:
+        print(f"Помилка при відкритті файлу TF11_1.txt для запису: {e}")
+
+# б) Читання вмісту файлу TF11_1, вилучення всіх символів крім цифр, доповнення до заданої довжини пробілами і запис у файл TF11_2
+def process_file_1_to_2():
+    target_length = 10
+    try:
+        with open("TF11_1.txt", "r") as f1, open("TF11_2.txt", "w") as f2:
+            for line in f1:
+                # Вилучаємо всі символи, крім цифр
+                digits_only = ''.join(re.findall(r'\d', line))
+                # Доповнюємо пробілами до заданої довжини
+                padded_line = digits_only.ljust(target_length)
+                f2.write(padded_line + "\n")
+    except IOError as e:
+        print(f"Помилка при відкритті файлів для читання чи запису: {e}")
+
+# в) Читання вмісту файлу TF11_2 і друку його по рядках
+def print_file_2():
+    try:
+        with open("TF11_2.txt", "r") as f2:
+            for line in f2:
+                print(line.strip())
+    except IOError as e:
+        print(f"Помилка при відкритті файлу TF11_2.txt для читання: {e}")
+
+# Виклик функцій
+create_file_1()      # Створюємо файл TF11_1
+process_file_1_to_2() # Обробляємо і записуємо в TF11_2
+print_file_2()        # Друкуємо вміст файлу TF11_2
