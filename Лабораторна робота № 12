@@ -1,0 +1,94 @@
+import json
+import os
+
+# Файл для збереження даних
+DATA_FILE = 'details_data.json'
+RESULT_FILE = 'result.json'
+
+# Функція для створення або завантаження даних
+def load_data():
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, 'r') as file:
+            return json.load(file)
+    return []
+
+# Функція для збереження даних
+def save_data(data):
+    with open(DATA_FILE, 'w') as file:
+        json.dump(data, file, indent=4)
+
+# Функція для виведення даних на екран
+def display_data():
+    data = load_data()
+    print(json.dumps(data, indent=4))
+
+# Функція для додавання нового запису
+def add_record():
+    data = load_data()
+    record = {
+        'date': input('Дата (YYYY-MM-DD): '),
+        'type': input('Тип деталі: '),
+        'quantity': int(input('Кількість: ')),
+        'price': float(input('Ціна за одиницю: '))
+    }
+    data.append(record)
+    save_data(data)
+    print('Запис додано!')
+
+# Функція для видалення запису
+def delete_record():
+    data = load_data()
+    date = input('Введіть дату запису для видалення (YYYY-MM-DD): ')
+    data = [record for record in data if record['date'] != date]
+    save_data(data)
+    print('Записи оновлено!')
+
+# Функція для пошуку записів
+def search_record():
+    data = load_data()
+    field = input('Введіть поле для пошуку (date/type/quantity/price): ')
+    value = input('Введіть значення для пошуку: ')
+    if field in ['quantity', 'price']:
+        value = float(value)
+    results = [record for record in data if str(record[field]) == str(value)]
+    print(json.dumps(results, indent=4))
+
+# Функція для обчислення загальної вартості деталей за тиждень
+def calculate_weekly_cost():
+    data = load_data()
+    total_cost = sum(record['quantity'] * record['price'] for record in data)
+    result = {'total_cost': total_cost}
+    with open(RESULT_FILE, 'w') as file:
+        json.dump(result, file, indent=4)
+    print(f'Загальна вартість: {total_cost} записана у {RESULT_FILE}')
+
+# Основна функція для діалогу з користувачем
+def main():
+    while True:
+        print('\nМеню:')
+        print('1. Показати всі записи')
+        print('2. Додати запис')
+        print('3. Видалити запис')
+        print('4. Пошук запису')
+        print('5. Обчислити загальну вартість')
+        print('6. Вихід')
+
+        choice = input('Оберіть опцію: ')
+
+        if choice == '1':
+            display_data()
+        elif choice == '2':
+            add_record()
+        elif choice == '3':
+            delete_record()
+        elif choice == '4':
+            search_record()
+        elif choice == '5':
+            calculate_weekly_cost()
+        elif choice == '6':
+            break
+        else:
+            print('Невірний вибір, спробуйте ще раз.')
+
+if __name__ == '__main__':
+    main()
