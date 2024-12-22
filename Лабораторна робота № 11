@@ -1,0 +1,65 @@
+import csv
+import os
+
+def process_inflation_data(input_file, output_file):
+    try:
+        # Перевірка існування вхідного файлу
+        if not os.path.exists(input_file):
+            raise FileNotFoundError(f"Файл '{input_file}' не знайдено.")
+
+        # Зчитування даних з вхідного файлу
+        with open(input_file, mode='r', encoding='utf-8') as infile:
+            reader = csv.reader(infile)
+            headers = next(reader)  # Зчитуємо заголовки стовпців
+
+            # Ініціалізація змінних для пошуку мінімального та максимального значень
+            min_value = float('inf')
+            max_value = float('-inf')
+            min_year = None
+            max_year = None
+
+            # Зчитування рядків даних
+            data = []
+            for row in reader:
+                try:
+                    year = int(row[0])
+                    if 1991 <= year <= 2019:
+                        inflation_rate = float(row[1])
+                        data.append((year, inflation_rate))
+                        # Оновлення мінімального та максимального значень
+                        if inflation_rate < min_value:
+                            min_value = inflation_rate
+                            min_year = year
+                        if inflation_rate > max_value:
+                            max_value = inflation_rate
+                            max_year = year
+                except ValueError:
+                    print(f"Помилка обробки рядка: {row}. Пропуск.")
+
+        # Виведення даних на екран
+        print("Рік, Інфляція (%)")
+        for year, inflation_rate in data:
+            print(f"{year}, {inflation_rate}")
+
+        # Запис результатів у вихідний файл
+        with open(output_file, mode='w', encoding='utf-8', newline='') as outfile:
+            writer = csv.writer(outfile)
+            writer.writerow(["Рік", "Інфляція (%)"])
+            writer.writerows(data)
+            writer.writerow([])
+            writer.writerow(["Найнижча інфляція", min_value, "Рік", min_year])
+            writer.writerow(["Найвища інфляція", max_value, "Рік", max_year])
+
+        print(f"Результати збережено у файл '{output_file}'.")
+
+    except FileNotFoundError as e:
+        print(e)
+    except PermissionError:
+        print(f"Немає доступу до файлу '{input_file}' або '{output_file}'.")
+    except Exception as e:
+        print(f"Виникла непередбачена помилка: {e}")
+
+# Приклад використання
+input_file = 'ukraine_inflation.csv'  # Введіть назву вашого вхідного файлу
+output_file = 'inflation_results.csv'  # Назва файлу для результатів
+process_inflation_data(input_file, output_file)
