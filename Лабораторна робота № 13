@@ -1,0 +1,71 @@
+import csv
+import json
+import os
+
+# Перший студент: створює .csv файл і конвертує його в .json
+try:
+    # Створення та запис даних у .csv файл
+    csv_file = 'students.csv'
+    with open(csv_file, mode='w', newline='', encoding='utf-8') as file:
+        writer = csv.writer(file)
+        writer.writerow(['ID', 'Name', 'Age'])  # Заголовки
+        writer.writerow([1, 'Vladislav', 20])
+        writer.writerow([2, 'Anna', 22])
+        writer.writerow([3, 'Ivan', 21])
+    
+    # Читання з .csv та запис у .json
+    json_file = 'students.json'
+    with open(csv_file, mode='r', encoding='utf-8') as file:
+        reader = csv.DictReader(file)
+        data = list(reader)
+    
+    with open(json_file, mode='w', encoding='utf-8') as file:
+        json.dump(data, file, indent=4)
+    print(f"Дані успішно скопійовані з {csv_file} у {json_file}")
+except Exception as e:
+    print(f"Помилка: {e}")
+
+
+# Другий студент: переписує з .json у .csv та додає нові дані
+try:
+    # Читання з .json
+    with open(json_file, mode='r', encoding='utf-8') as file:
+        data = json.load(file)
+
+    # Додавання нових рядків
+    data.append({'ID': 4, 'Name': 'Olga', 'Age': 23})
+    data.append({'ID': 5, 'Name': 'Dmytro', 'Age': 24})
+
+    # Запис у .csv файл
+    with open(csv_file, mode='w', newline='', encoding='utf-8') as file:
+        writer = csv.DictWriter(file, fieldnames=['ID', 'Name', 'Age'])
+        writer.writeheader()
+        writer.writerows(data)
+    print(f"Дані успішно скопійовані з {json_file} у {csv_file} з новими рядками.")
+except Exception as e:
+    print(f"Помилка: {e}")
+
+
+# Третій студент: переписує вміст .csv у .json, додаючи нові дані
+try:
+    # Читання з .csv
+    with open(csv_file, mode='r', encoding='utf-8') as file:
+        reader = csv.DictReader(file)
+        data = list(reader)
+
+    # Додавання нових рядків
+    data.append({'ID': 6, 'Name': 'Serhiy', 'Age': 25})
+    data.append({'ID': 7, 'Name': 'Natalia', 'Age': 26})
+
+    # Запис у .json файл
+    with open(json_file, mode='w', encoding='utf-8') as file:
+        json.dump(data, file, indent=4)
+    print(f"Дані успішно скопійовані з {csv_file} у {json_file} з новими рядками.")
+except Exception as e:
+    print(f"Помилка: {e}")
+
+# Опис структури файлів
+# CSV: Табличний формат, де рядки розділені комами або іншими символами.
+# JSON: Формат зберігання даних у вигляді об'єктів та масивів, схожий на словники в Python.
+
+# Посилання для завантаження створених файлів (при запуску коду буде створено ці файли у локальній директорії).
