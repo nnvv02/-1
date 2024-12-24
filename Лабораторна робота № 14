@@ -1,0 +1,129 @@
+!! 1 Завдання !!
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Визначення функції
+def y(x):
+    return 5 * np.sin(10 * x) * np.sin(3 * x) / np.sqrt(x)
+
+# Задаємо діапазон значень для x
+x = np.linspace(1, 7, 1000)  # 1000 точок на інтервалі [1, 7]
+
+# Обчислюємо значення функції для кожного x
+y_values = y(x)
+
+# Будуємо графік
+plt.plot(x, y_values, color='blue', linewidth=2, linestyle='-')
+
+# Додаємо підписи осей і заголовок
+plt.xlabel('x')
+plt.ylabel('y(x)')
+plt.title('Графік функції y(x) = 5*sin(10*x)*sin(3*x)/(x^(1/2))')
+
+# Встановлюємо межі осей (не обов'язково)
+# plt.xlim(1, 7)
+# plt.ylim(-10, 10)
+
+# Додаємо легенду (якщо потрібно)
+# plt.legend(['y(x)'])
+
+# Показати графік
+plt.show()
+
+!! 2 Завдання !!
+
+import csv
+import matplotlib.pyplot as plt
+
+# Завантаження даних
+file_path = r"C:\Users\RX\dynamic.csv" 
+data = {}
+years = [str(year) for year in range(2003, 2024)]
+
+with open(file_path, "r", encoding="utf-8") as file:
+    reader = csv.DictReader(file, delimiter=",")
+    for row in reader:
+        country = row['Country Name']
+        
+        # Додаємо значення або float('nan') для відсутніх значень
+        values = [
+            float(row[year]) if row[year] else float('nan') 
+            for year in years
+        ]
+        data[country] = values
+
+# Функція для побудови лінійного графіка
+def plot_indicator_dynamic(country1, country2):
+    # Графік для першої країни
+    plt.plot(years, data[country1], marker='o', label=country1, color='purple')
+    
+    # Графік для другої країни
+    plt.plot(years, data[country2], marker='s', label=country2, color='yellow')
+    
+    plt.xlabel("Year")
+    plt.ylabel("Indicator Value")
+    plt.title(f"Indicator Dynamics for {country1} and {country2}")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+# Приклад використання
+country1 = input("Введіть назву першої країни для побудови динаміки: ")
+country2 = input("Введіть назву другої країни для побудови динаміки: ")
+plot_indicator_dynamic(country1, country2)
+
+!! 3 Завдання !!
+
+import json
+import os
+import matplotlib.pyplot as plt
+
+def load_data():
+    # Завантаження даних із файлу
+    DATA_FILE = 'C:/Users/RX/Desktop/details_data.json'
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, 'r') as file:
+            return json.load(file)
+    return []
+
+def plot_pie_chart():
+    # Завантаження даних
+    data = load_data()
+
+    if not data:
+        print("Дані відсутні для побудови діаграми.")
+        return
+
+    # Групування даних за типом деталей
+    summary = {}
+    for record in data:
+        detail_type = record['type']
+        total_cost = record['quantity'] * record['price']
+        if detail_type in summary:
+            summary[detail_type] += total_cost
+        else:
+            summary[detail_type] = total_cost
+
+    # Підготовка даних для побудови діаграми
+    labels = list(summary.keys())
+    sizes = list(summary.values())
+    colors = plt.cm.tab20.colors[:len(labels)]  # Вибір кольорів для секторів
+
+    # Побудова кругової діаграми
+    plt.figure(figsize=(8, 8))
+    plt.pie(
+        sizes,
+        labels=labels,
+        autopct='%1.1f%%',  # Відображення значень у відсотках
+        startangle=140,
+        colors=colors
+    )
+    plt.title('Розподіл вартості деталей за типами')
+    plt.axis('equal')  # Збереження круглої форми діаграми
+
+    # Відображення діаграми
+    plt.show()
+
+if __name__ == '__main__':
+    plot_pie_chart()
