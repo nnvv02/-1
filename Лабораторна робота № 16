@@ -1,0 +1,79 @@
+!! 1 Завдання !!
+
+# Імпортування необхідних бібліотек
+import nltk
+from nltk.corpus import gutenberg, stopwords
+from collections import Counter
+import matplotlib.pyplot as plt
+import string
+
+# Завантаження необхідних даних nltk
+nltk.download('gutenberg', quiet=True)
+nltk.download('stopwords', quiet=True)
+
+# Завантаження тексту з "Alice's Adventures in Wonderland" Льюїса Керролла
+text = gutenberg.words('carroll-alice.txt')
+
+# Рахуємо загальну кількість слів у тексті
+print("Кількість слів у тексті:", len(text))
+
+# Функція для побудови діаграми
+def plot_bar_chart(data, title, xlabel, ylabel, color):
+    words, counts = zip(*data)
+    plt.figure(figsize=(10, 5))
+    plt.bar(words, counts, color=color)
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.show()
+
+# Знаходимо 10 найпоширеніших слів у тексті (включаючи пунктуацію)
+common_words = Counter(text).most_common(10)
+print("10 найбільш вживаних слів (включаючи пунктуацію):", common_words)
+plot_bar_chart(common_words, "10 найбільш вживаних слів (включаючи пунктуацію)", "Слова", "Частота", "skyblue")
+
+# Видалення лише розділових знаків ( , ! . ? -- ' )
+punctuation = {',', '!', '.', '?', '--', "'"}
+filtered_text = [word.lower() for word in text if word not in punctuation]
+
+# Знаходження 10 найбільш вживаних слів у відфільтрованому тексті (без розділових знаків)
+filtered_common_words = Counter(filtered_text).most_common(10)
+print("10 найбільш вживаних слів (без розділових знаків):", filtered_common_words)
+plot_bar_chart(filtered_common_words, "10 найбільш вживаних слів (без розділових знаків)", "Слова", "Частота", "salmon")
+
+!! 2 Завдання !!
+
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer, PorterStemmer
+import string
+
+# Завантаження необхідних ресурсів
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+
+# Зчитування вихідного тексту з файлу text.txt
+with open('text.txt', 'r') as file:
+    initial_text = file.read()
+
+# Токенізація тексту на слова
+tokens = word_tokenize(initial_text)
+
+# Ініціалізація лемматизатора, стеммера та стоп-слів
+lemmatizer = WordNetLemmatizer()
+stemmer = PorterStemmer()
+stop_words = set(stopwords.words('english'))
+
+# Лемматизація, стемінг, видалення стоп-слів та пунктуації
+processed_tokens = [
+    stemmer.stem(lemmatizer.lemmatize(word.lower()))
+    for word in tokens
+    if word.lower() not in stop_words and word not in string.punctuation
+]
+
+# Зберігаємо оброблений текст у новий файл
+processed_text = ' '.join(processed_tokens)
+with open('processed_text.txt', 'w') as file:
+    file.write(processed_text)
