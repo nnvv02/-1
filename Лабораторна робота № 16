@@ -32,14 +32,19 @@ common_words = Counter(text).most_common(10)
 print("10 найбільш вживаних слів (включаючи пунктуацію):", common_words)
 plot_bar_chart(common_words, "10 найбільш вживаних слів (включаючи пунктуацію)", "Слова", "Частота", "skyblue")
 
-# Видалення лише розділових знаків ( , ! . ? -- ' )
-punctuation = {',', '!', '.', '?', '--', "'"}
-filtered_text = [word.lower() for word in text if word not in punctuation]
+# Завантажуємо стоп-слова
+stop_words = set(stopwords.words('english'))
 
-# Знаходження 10 найбільш вживаних слів у відфільтрованому тексті (без розділових знаків)
+# Видалення розділових знаків та стоп-слів
+filtered_text = [
+    word.lower() for word in text
+    if word.lower() not in stop_words and word not in string.punctuation
+]
+
+# Знаходження 10 найбільш вживаних слів у відфільтрованому тексті (без стоп-слів та розділових знаків)
 filtered_common_words = Counter(filtered_text).most_common(10)
-print("10 найбільш вживаних слів (без розділових знаків):", filtered_common_words)
-plot_bar_chart(filtered_common_words, "10 найбільш вживаних слів (без розділових знаків)", "Слова", "Частота", "salmon")
+print("10 найбільш вживаних слів (без стоп-слів та розділових знаків):", filtered_common_words)
+plot_bar_chart(filtered_common_words, "10 найбільш вживаних слів (без стоп-слів та розділових знаків)", "Слова", "Частота", "salmon")
 
 !! 2 Завдання !!
 
