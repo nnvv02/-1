@@ -32,6 +32,7 @@ plt.title('Графік функції y(x) = 5*sin(10*x)*sin(3*x)/(x^(1/2))')
 plt.show()
 
 !! 2 Завдання !!
+!! 2.1
 
 import csv
 import matplotlib.pyplot as plt
@@ -72,6 +73,53 @@ def plot_indicator_dynamic(country1, country2):
 country1 = input("Введіть назву першої країни для побудови динаміки: ")
 country2 = input("Введіть назву другої країни для побудови динаміки: ")
 plot_indicator_dynamic(country1, country2)
+
+!! 2.2
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Завантаження даних
+data_file = 'C:/Users/RX/Desktop/10.csv'  # Вкажіть шлях до файлу
+
+# Зчитування даних
+data = pd.read_csv(data_file)
+
+# Фільтрація даних за обраним показником
+indicator = 'Adjusted net enrollment rate, primary (% of primary school age children)'  # Показник
+filtered_data = data[data['Series Name'] == indicator]
+
+# Введення країн користувачем
+country1 = input("Введіть першу країну (наприклад, Zambia): ")
+country2 = input("Введіть другу країну (наприклад, Zimbabwe): ")
+
+# Фільтрація даних для обраних країн
+country1_data = filtered_data[filtered_data['Country Name'] == country1]
+country2_data = filtered_data[filtered_data['Country Name'] == country2]
+
+# Вибір років
+years = [f"{year} [YR{year}]" for year in range(2002, 2008)]  # Останні доступні роки у файлі
+country1_values = country1_data[years].values.flatten()
+country2_values = country2_data[years].values.flatten()
+
+# Перетворення даних у числовий формат
+country1_values = pd.to_numeric(country1_values, errors='coerce')
+country2_values = pd.to_numeric(country2_values, errors='coerce')
+
+# Побудова діаграми
+x = range(len(years))
+
+plt.figure(figsize=(12, 6))
+plt.bar([i - 0.2 for i in x], country1_values, width=0.4, label=country1, color='skyblue')
+plt.bar([i + 0.2 for i in x], country2_values, width=0.4, label=country2, color='orange')
+
+plt.xlabel('Рік')
+plt.ylabel('Кількість дітей')
+plt.title('Adjusted net enrollment rate, primary (2002-2007)')
+plt.xticks(ticks=x, labels=[str(year) for year in range(2002, 2008)], rotation=45)
+plt.legend()
+plt.tight_layout()
+plt.show()
 
 !! 3 Завдання !!
 
