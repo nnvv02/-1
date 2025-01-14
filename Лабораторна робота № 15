@@ -30,9 +30,10 @@ print(agg_df)
 !! Завдання 2 !!
 
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # Шлях до файлу на робочому столі
-file_path = 'C:/Users/RX/Desktop/2016.csv'
+file_path = 'C:/Users/RX/Desktop/comptagevelo20162.csv'
 
 # Завантаження файлу у датафрейм
 df = pd.read_csv(file_path)
@@ -49,5 +50,29 @@ df['Month'] = df['Date'].dt.month
 # Обчислення загальної кількості велосипедистів за всіма доріжками
 df['Total_Cyclists'] = df.iloc[:, 1:-1].sum(axis=1)
 
-# Відображення датафрейму
-print(df.head())
+# Визначення місяця з найбільшою популярністю
+popular_month = df.groupby('Month')['Total_Cyclists'].sum().idxmax()
+print(f"Найбільш популярний місяць серед велосипедистів: {popular_month}")
+
+# Побудова графіку відвідуваності обраної велодоріжки за місяцями
+# Введіть назву велодоріжки, яку хочете проаналізувати
+bike_path = input("Введіть назву велодоріжки для аналізу: ")
+
+if bike_path in df.columns:
+    monthly_data = df.groupby('Month')[bike_path].sum()
+    
+    # Побудова графіку
+    plt.figure(figsize=(10, 6))
+    monthly_data.plot(kind='bar', color='skyblue')
+    plt.title(f'Відвідуваність велодоріжки "{bike_path}" за місяцями (2016 рік)')
+    plt.xlabel('Місяць')
+    plt.ylabel('Кількість велосипедистів')
+    plt.xticks(ticks=range(12), labels=[
+        'Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 
+        'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'
+    ], rotation=45)
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    plt.tight_layout()
+    plt.show()
+else:
+    print(f"Велодоріжка з назвою '{bike_path}' не знайдена у датафреймі.")
