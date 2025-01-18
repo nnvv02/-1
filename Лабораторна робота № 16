@@ -6,12 +6,13 @@ from nltk.corpus import gutenberg, stopwords
 from collections import Counter
 import matplotlib.pyplot as plt
 import string
+import re
 
 # Завантаження необхідних даних nltk
 nltk.download('gutenberg', quiet=True)
 nltk.download('stopwords', quiet=True)
 
-# Завантаження тексту з "Alice's Adventures in Wonderland" Льюїса Керролла
+# Завантаження тексту з "Alice's Adventures in Wonderland" Льюїса Керрола
 text = gutenberg.words('carroll-alice.txt')
 
 # Рахуємо загальну кількість слів у тексті
@@ -28,17 +29,17 @@ def plot_bar_chart(data, title, xlabel, ylabel, color):
     plt.show()
 
 # Знаходимо 10 найпоширеніших слів у тексті (включаючи пунктуацію)
-common_words = Counter(text).most_common(10)
+common_words = Counter(word for word in text if word != "'").most_common(10)
 print("10 найбільш вживаних слів (включаючи пунктуацію):", common_words)
 plot_bar_chart(common_words, "10 найбільш вживаних слів (включаючи пунктуацію)", "Слова", "Частота", "skyblue")
 
 # Завантажуємо стоп-слова
 stop_words = set(stopwords.words('english'))
 
-# Видалення розділових знаків та стоп-слів
+# Видалення розділових знаків, стоп-слів та небажаних символів
 filtered_text = [
-    word.lower() for word in text
-    if word.lower() not in stop_words and word not in string.punctuation
+    re.sub(r"['’‘]", "", word.lower()) for word in text
+    if re.sub(r"['’‘]", "", word.lower()) not in stop_words and re.fullmatch(r'[a-z]+', re.sub(r"['’‘]", "", word.lower()))
 ]
 
 # Знаходження 10 найбільш вживаних слів у відфільтрованому тексті (без стоп-слів та розділових знаків)
